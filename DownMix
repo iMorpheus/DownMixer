@@ -1,0 +1,23 @@
+#!/bin/sh
+function DownMix()
+{
+  # File Picker
+  echo '~~~~~~~~~~~~~~~~~~~~~~~Original Audio File~~~~~~~~~~~~~~~~~~~~~~~';
+  echo "Select File to be downmixed: ";
+  cd ./Originals/;
+  ls .;
+  read -e ORGNL;
+
+  # DOWNMIXER
+  EPSNU=$( echo $ORGNL | grep -Eo '[0-9][0-9][0-9]');
+
+  EPSNAME=$(echo $ORGNL | sed s/Original// | sed s/\.m4a//);
+
+  afconvert -d BEI16 -f 'caff' -c 1 --mix $ORGNL $EPSNU_$EPSNAME.caf;
+  afconvert -d aac -f 'm4af' $EPSNAME.caf $EPSNAME.m4a;
+
+  # Clean up
+  cd ..;
+  mv ./Originals/$EPSNAME.m4a .;
+  rm ./Originals/$EPSNAME.caf;
+}
